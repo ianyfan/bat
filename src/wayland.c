@@ -38,7 +38,7 @@ static void handle_registry(void *data, struct wl_registry *registry,
 bool init_wayland(struct bat_state *state) {
 	state->display = wl_display_connect(NULL);
 	if (state->display == NULL) {
-		fprintf(stderr, "Failed to connect to wayland display\n");
+		fputs("Failed to connect to wayland display\n", stderr);
 		return false;
 	}
 
@@ -52,12 +52,13 @@ bool init_wayland(struct bat_state *state) {
 	wl_registry_add_listener(state->registry, &registry_listener, state);
 	wl_display_roundtrip(state->display);
 	if (!(state->compositor && state->layer_shell && state->shm)) {
-		fprintf(stderr, "Failed to acquire required wayland resources\n");
+		fputs("Failed to acquire required wayland resources\n", stderr);
 		return false;
 	}
 
 	if (wl_list_length(&state->outputs) == 0) {
-		fprintf(stderr, "Warning: no outputs detected\n");
+		// do not terminate in case outputs are later added
+		fputs("Warning: no outputs detected\n", stderr);
 		return true;
 	}
 
@@ -65,7 +66,8 @@ bool init_wayland(struct bat_state *state) {
 	wl_display_roundtrip(state->display);
 
 	if (wl_list_length(&state->outputs) == 0) {
-		fprintf(stderr, "Warning: no outputs found matching specified names\n");
+		// do not terminate in case the correct output is later added
+		fputs("Warning: no outputs found matching specified names\n", stderr);
 	}
 
 	return true;

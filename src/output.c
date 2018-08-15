@@ -55,7 +55,7 @@ static void scale_output(void *data, struct wl_output *wl_output, int32_t factor
 void create_output(struct bat_state *state, struct wl_output *wl_output) {
 	struct bat_output *output = malloc(sizeof(*output));
 	if (output == NULL) {
-		fprintf(stderr, "Failed to allocate memory for output object\n");
+		fputs("Failed to allocate memory for output object\n", stderr);
 		return;
 	}
 

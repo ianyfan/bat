@@ -11,6 +11,10 @@
 #include <wayland-client.h>
 
 static void draw_frame(struct bat_output *output, struct bat_info *info) {
+	if (output->free_buffer == NULL) {
+		output->free_buffer = create_buffer(output);
+		if (output->free_buffer == NULL) return;
+	}
 	if (output->free_buffer->busy) return;
 
 	// render top-down, then rotate to correct orientation

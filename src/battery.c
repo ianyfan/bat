@@ -29,7 +29,7 @@ bool is_battery(const char *name) {
 struct string_list *detect_batteries(void) {
 	DIR *parent_dir = opendir("/sys/class/power_supply");
 	if (parent_dir == NULL) {
-		fprintf(stderr, "Failed to open directory of power supplies\n");
+		fputs("Failed to open directory of power supplies\n", stderr);
 		return NULL;
 	}
 

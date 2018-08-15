@@ -53,7 +53,7 @@ int main(int argc, char **argv) {
 		case -1: return EXIT_FAILURE;
 	} // ignore 0
 	if (state.config.batteries == NULL) {
-		fprintf(stderr, "Failed to find any batteries\n");
+		fputs("Failed to find any batteries\n", stderr);
 		return EXIT_FAILURE;
 	}
 

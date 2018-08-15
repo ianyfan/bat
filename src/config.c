@@ -106,6 +106,7 @@ int parse_config(struct bat_config *config, int argc, char **argv) {
 	while (true) {
 		int c = getopt_long(argc, argv, "hb:o:i:w:a:p:s:t:c:d:f:l:", long_options, NULL);
 		if (c == -1) break;
+		if (c == ':' || c == '?') return -1;
 		if (c == 'h') return 1;
 
 		if (c == 'b') ++number_of_batteries;
@@ -122,15 +123,14 @@ int parse_config(struct bat_config *config, int argc, char **argv) {
 		int option_index = -1;
 		int c = getopt_long(argc, argv, "hb:o:i:w:a:p:s:t:c:d:f:l:", long_options, &option_index);
 		if (c == -1) return 0;
-		if (c == ':' || c == '?') return -1;
 
 		if (c == 0 && strcmp(long_options[option_index].name, "use-design-capacity") == 0) {
 			config->use_design_capacity = true;
 		} else if (!parse_option(c, optarg, config)) {
 			if (option_index != -1) {
-				fprintf(stderr, "Invalid value for option '--%s': '%s'\n", long_options[option_index].name, optarg);
+				fprintf(stderr, "Invalid argument for option '--%s': '%s'\n", long_options[option_index].name, optarg);
 			} else {
-				fprintf(stderr, "Invalid value for option '-%c': '%s'\n", c, optarg);
+				fprintf(stderr, "Invalid argument for option '-%c': '%s'\n", c, optarg);
 			}
 			return -1;
 		}

@@ -9,16 +9,16 @@ struct bat_monitor create_monitor(void) {
 
 	struct udev *udev = udev_new();
 	if (udev == NULL) {
-		fprintf(stderr, "Failed to create udev object\n");
+		fputs("Failed to create udev object\n", stderr);
 		return monitor;
 	}
 
 	if ((monitor.udev_monitor = udev_monitor_new_from_netlink(udev, "udev")) == NULL) {
-		fprintf(stderr, "Failed to create battery monitor\n");
+		fputs("Failed to create battery monitor\n", stderr);
 	} else if (udev_monitor_filter_add_match_subsystem_devtype(monitor.udev_monitor, "power_supply", NULL) < 0) {
-		fprintf(stderr, "Failed to filter battery monitor\n");
+		fputs("Failed to filter battery monitor\n", stderr);
 	} else if (udev_monitor_enable_receiving(monitor.udev_monitor) < 0) {
-		fprintf(stderr, "Failed to start battery monitor\n");
+		fputs("Failed to start battery monitor\n", stderr);
 	} else {
 		// success
 		monitor.fd = udev_monitor_get_fd(monitor.udev_monitor);

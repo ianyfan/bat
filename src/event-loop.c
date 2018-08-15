@@ -62,7 +62,7 @@ void run_event_loop(struct bat_state *state) {
 		// read wayland events
 		if (events[BAT_WAYLAND_EVENT].revents & POLLIN) {
 			if (wl_display_read_events(state->display) != 0) {
-				fprintf(stderr, "Failed to process wayland event\n");
+				fputs("Failed to process wayland event\n", stderr);
 				break;
 			}
 		} else {
@@ -74,7 +74,7 @@ void run_event_loop(struct bat_state *state) {
 			uint64_t expirations;
 			ssize_t n = read(timer_fd, &expirations, sizeof(expirations));
 			if (n < 0) {
-				fprintf(stderr, "Failed to process timer event\n");
+				fputs("Failed to process timer event\n", stderr);
 				break;
 			}
 			render_frame(state);

@@ -16,7 +16,7 @@ static int create_pool_file(int size, char path[64]) {
 	static const char *template = "bat-XXXXXX";
 	const char *dir = getenv("XDG_RUNTIME_DIR");
 	if (dir == NULL) {
-		fprintf(stderr, "XDG_RUNTIME_DIR is not set\n");
+		fputs("XDG_RUNTIME_DIR is not set\n", stderr);
 		return -1;
 	}
 
@@ -24,12 +24,12 @@ static int create_pool_file(int size, char path[64]) {
 
 	int fd = mkstemp(path);
 	if (fd == -1) {
-		fprintf(stderr, "Failed to create pool file\n");
+		fputs("Failed to create pool file\n", stderr);
 		return -1;
 	}
 
 	if (ftruncate(fd, size) == -1) {
-		fprintf(stderr, "Failed to resize pool file\n");
+		fputs("Failed to resize pool file\n", stderr);
 		close(fd);
 		return -1;
 	}
@@ -45,7 +45,7 @@ static void release_buffer(void *data, struct wl_buffer *wl_buffer) {
 struct bat_buffer *create_buffer(struct bat_output *output) {
 	struct bat_buffer *buffer = malloc(sizeof(*buffer));
 	if (buffer == NULL) {
-		fprintf(stderr, "Failed to allocate memory for buffer object\n");
+		fputs("Failed to allocate memory for buffer object\n", stderr);
 		return NULL;
 	}
 	buffer->busy = false;
@@ -69,7 +69,7 @@ struct bat_buffer *create_buffer(struct bat_output *output) {
 
 			wl_shm_pool_destroy(pool);
 		} else {
-			fprintf(stderr, "Failed to map pool file to memory\n");
+			fputs("Failed to map pool file to memory\n", stderr);
 			free(buffer);
 			buffer = NULL;
 		}

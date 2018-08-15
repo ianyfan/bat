@@ -15,12 +15,12 @@ struct string_list *string_list_init(int size) {
 
 bool string_list_add(struct string_list *list, const char *string) {
 	if (list->length == list->size) {
-		fprintf(stderr, "List is somehow full\n");
+		fputs("List is somehow full\n", stderr);
 		return false;
 	}
 	char *str_dup = strdup(string);
 	if (str_dup == NULL) {
-		fprintf(stderr, "Failed to duplicate string to add to list\n");
+		fprintf(stderr, "Failed to duplicate string '%s' to add to list\n", string);
 		return false;
 	}
 	list->list[list->length++] = str_dup;
@@ -29,7 +29,7 @@ bool string_list_add(struct string_list *list, const char *string) {
 
 char *string_list_get(struct string_list *list, int index) {
 	if (index >= list->length) {
-		fprintf(stderr, "Somehow trying to index past end of list\n");
+		fputs("Somehow trying to index past end of list\n", stderr);
 		return NULL;
 	}
 	return list->list[index];
