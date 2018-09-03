@@ -47,7 +47,15 @@ static bool parse_color(const char *string, uint32_t *out) {
 	*out = (uint32_t) strtoul(string, &end, 16);
 	if (errno != 0 || *end != '\0') return false;
 
-	if (len == 6) *out = (*out << 8) | 0xFF;
+	if (len == 8) {
+		int alpha = *out & 0xff;
+		int r = (*out >> 24)*alpha/255;
+		int g = (*out >> 16 & 0xff)*alpha/255;
+		int b = (*out >> 8 & 0xff)*alpha/255;
+		*out = alpha << 24 | r << 16 | g << 8 | b;
+	} else {
+		*out |= 0xff000000;
+	}
 	return true;
 }
 
