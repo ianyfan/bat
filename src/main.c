@@ -46,12 +46,12 @@ static void handle_signal(int signum) {
 
 int main(int argc, char **argv) {
 	init_default_config(&state.config);
-	switch (parse_config(&state.config, argc, argv)) {
-		case 1:
-			printf(usage);
-			return EXIT_SUCCESS;
-		case -1: return EXIT_FAILURE;
-	} // ignore 0
+	int ret = parse_config(&state.config, argc, argv);
+	if (ret != 0) {
+		finish_config(&state.config);
+		if (ret == 1) puts(usage);
+		return ret == 1 ? EXIT_SUCCESS : EXIT_FAILURE;
+	}
 	if (state.config.batteries == NULL) {
 		fputs("Failed to find any batteries\n", stderr);
 		return EXIT_FAILURE;

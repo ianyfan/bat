@@ -53,7 +53,7 @@ void run_event_loop(struct bat_state *state) {
 		}
 		wl_display_flush(state->display);
 
-		polled =  poll(events, BAT_EVENT_COUNT, -1);
+		polled = poll(events, BAT_EVENT_COUNT, -1);
 		if (polled < 0) {
 			wl_display_cancel_read(state->display);
 			break;

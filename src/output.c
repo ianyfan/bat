@@ -21,9 +21,7 @@ static void handle_xdg_output_name(void *data, struct zxdg_output_v1 *xdg_output
 	// remove unwanted outputs
 	struct bat_output *output = data;
 	struct string_list *outputs = output->state->config.outputs;
-	if (outputs != NULL && !string_list_contains(outputs, name)) {
-		destroy_output(output);
-	}
+	if (!string_list_contains(outputs, name)) destroy_output(output);
 }
 
 static void configure_layer_surface(void *data, struct zwlr_layer_surface_v1 *layer_surface,
@@ -71,15 +69,17 @@ void create_output(struct bat_state *state, struct wl_output *wl_output) {
 	};
 	wl_output_add_listener(wl_output, &output_listener, output);
 
-	struct zxdg_output_v1 *xdg_output = zxdg_output_manager_v1_get_xdg_output(state->output_manager, output->wl_output);
-	static const struct zxdg_output_v1_listener xdg_output_listener = {
-		.description = noop,
-		.done = noop,
-		.logical_position = noop,
-		.logical_size = noop,
-		.name = handle_xdg_output_name
-	};
-	zxdg_output_v1_add_listener(xdg_output, &xdg_output_listener, output);
+	if (state->output_manager != NULL) {
+		struct zxdg_output_v1 *xdg_output = zxdg_output_manager_v1_get_xdg_output(state->output_manager, output->wl_output);
+		static const struct zxdg_output_v1_listener xdg_output_listener = {
+			.description = noop,
+			.done = noop,
+			.logical_position = noop,
+			.logical_size = noop,
+			.name = handle_xdg_output_name
+		};
+		zxdg_output_v1_add_listener(xdg_output, &xdg_output_listener, output);
+	}
 
 	output->surface = wl_compositor_create_surface(state->compositor);
 	output->layer_surface = zwlr_layer_shell_v1_get_layer_surface(

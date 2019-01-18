@@ -52,8 +52,8 @@ struct bat_info get_battery_info(struct string_list *batteries) {
 	struct bat_info info = {0};
 
 	int remaining = 0;
-	int full = 0;
-	int full_design = 0;
+	int full = -1;
+	int full_design = -1;
 
 	for (int i = 0; i < batteries->length; ++i) {
 		char *name = string_list_get(batteries, i);

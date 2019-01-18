@@ -28,7 +28,9 @@ static void handle_registry(void *data, struct wl_registry *registry,
 	} else if (strcmp(interface, wl_shm_interface.name) == 0) {
 		state->shm = wl_registry_bind(registry, name, &wl_shm_interface, 1);
 	} else if (strcmp(interface, zxdg_output_manager_v1_interface.name) == 0) {
-		state->output_manager = wl_registry_bind(registry, name, &zxdg_output_manager_v1_interface, 2);
+		if (state->config.outputs != NULL) {
+			state->output_manager = wl_registry_bind(registry, name, &zxdg_output_manager_v1_interface, 2);
+		}
 	} else if (strcmp(interface, wl_output_interface.name) == 0) {
 		struct wl_output *output = wl_registry_bind(registry, name, &wl_output_interface, 3);
 		create_output(state, output);
@@ -80,7 +82,7 @@ void finish_wayland(struct bat_state *state) {
 	}
 
 	wl_shm_destroy(state->shm);
-	zxdg_output_manager_v1_destroy(state->output_manager);
+	if (state->output_manager != NULL) zxdg_output_manager_v1_destroy(state->output_manager);
 	zwlr_layer_shell_v1_destroy(state->layer_shell);
 	wl_compositor_destroy(state->compositor);
 	wl_registry_destroy(state->registry);

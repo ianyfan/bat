@@ -67,7 +67,7 @@ static void draw_frame(struct bat_output *output, struct bat_info *info) {
 
 void render_frame(struct bat_state *state) {
 	struct bat_info info = get_battery_info(state->config.batteries);
-	if (info.percentage == 0) return;
+	if (info.percentage < 0) return;
 
 	struct bat_output *output;
 	wl_list_for_each(output, &state->outputs, link) {
