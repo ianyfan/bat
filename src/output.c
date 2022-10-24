@@ -99,10 +99,10 @@ void create_output(struct bat_state *state, struct wl_output *wl_output) {
 	int height = 0, width = 0;
 	if (anchor == ZWLR_LAYER_SURFACE_V1_ANCHOR_BOTTOM || anchor == ZWLR_LAYER_SURFACE_V1_ANCHOR_TOP) {
 		height = state->config.thickness;
-		anchor |= ZWLR_LAYER_SURFACE_V1_ANCHOR_LEFT;
+		anchor |= ZWLR_LAYER_SURFACE_V1_ANCHOR_LEFT | ZWLR_LAYER_SURFACE_V1_ANCHOR_RIGHT;
 	} else if (anchor == ZWLR_LAYER_SURFACE_V1_ANCHOR_LEFT || anchor == ZWLR_LAYER_SURFACE_V1_ANCHOR_RIGHT) {
 		width = state->config.thickness;
-		anchor |= ZWLR_LAYER_SURFACE_V1_ANCHOR_TOP;
+		anchor |= ZWLR_LAYER_SURFACE_V1_ANCHOR_BOTTOM | ZWLR_LAYER_SURFACE_V1_ANCHOR_TOP;
 	}
 
 	zwlr_layer_surface_v1_set_anchor(output->layer_surface, anchor);
