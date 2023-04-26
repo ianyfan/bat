@@ -76,11 +76,14 @@ struct bat_info get_battery_info(struct string_list *batteries) {
 					case 'D': info.status = DISCHARGING; break;
 					case 'F': info.status = FULL; break;
 				} // defaults to UNKNOWN, so ignore anything else
-			} else if (strncmp(line, "POWER_SUPPLY_ENERGY_NOW=", 24) == 0) {
+			} else if (strncmp(line, "POWER_SUPPLY_ENERGY_NOW=", 24) == 0 ||
+				   strncmp(line, "POWER_SUPPLY_CHARGE_NOW=", 24) == 0) {
 				remaining += atoi(line + 24);
-			} else if (strncmp(line, "POWER_SUPPLY_ENERGY_FULL=", 25) == 0) {
+			} else if (strncmp(line, "POWER_SUPPLY_ENERGY_FULL=", 25) == 0 ||
+				   strncmp(line, "POWER_SUPPLY_CHARGE_FULL=", 25) == 0) {
 				full += atoi(line + 25);
-			} else if (strncmp(line, "POWER_SUPPLY_ENERGY_FULL_DESIGN=", 32) == 0) {
+			} else if (strncmp(line, "POWER_SUPPLY_ENERGY_FULL_DESIGN=", 32) == 0 ||
+				   strncmp(line, "POWER_SUPPLY_CHARGE_FULL_DESIGN=", 32) == 0) {
 				full_design += atoi(line + 32);
 			}
 		}
